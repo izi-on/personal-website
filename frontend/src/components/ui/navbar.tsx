@@ -48,7 +48,7 @@ export function Navbar({ tabs }: { tabs: Tabs[] }) {
   ));
 
   return (
-    <nav className="border-b">
+    <nav className="border-b bg-background">
       <div className="relative flex h-16 items-center justify-center mx-4">
         {/* Logo */}
         <div className="absolute flex items-center left-0">
