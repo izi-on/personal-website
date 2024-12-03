@@ -6,11 +6,9 @@ import { cn } from "@/lib/utils";
 import { Tabs } from "@/config/RootTabsConfig";
 import { useLocation, useNavigate } from "react-router-dom";
 import ThemeToggle from "./ThemeToggle";
+import { UnderlineOnSelection } from "./UnderlineOnSelection";
 
 const baseNavBtnStyle = "text-sm font-medium";
-
-const ifSelectedStyle =
-  "rounded-none border-b-2 border-b-black dark:border-b-white";
 
 interface NavigationButtonProps {
   path: string;
@@ -21,26 +19,27 @@ interface NavigationButtonProps {
 const NavigationButton = forwardRef<HTMLButtonElement, NavigationButtonProps>(
   ({ path, children, className }, ref) => {
     const navigate = useNavigate();
-    const isSelected = useLocation().pathname.substring(1) === path;
     return (
       <Button
         variant="ghost"
         ref={ref}
         onClick={() => navigate(path)}
-        className={cn(
-          baseNavBtnStyle,
-          className,
-          isSelected && ifSelectedStyle,
-        )}
+        className={cn(baseNavBtnStyle, className)}
       >
         {children}
       </Button>
     );
   },
 );
+
 export function Navbar({ tabs }: { tabs: Tabs[] }) {
+  const location = useLocation();
+  const isSelected = (key: string) => () =>
+    location.pathname.substring(1) === key;
   const NavItems = tabs.map((tab) => (
-    <NavigationButton path={tab.key}>{tab.title}</NavigationButton>
+    <UnderlineOnSelection isSelected={isSelected(tab.key)}>
+      <NavigationButton path={tab.key}>{tab.title}</NavigationButton>
+    </UnderlineOnSelection>
   ));
   return (
     <nav className="border-b">
