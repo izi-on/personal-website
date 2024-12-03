@@ -5,10 +5,10 @@ import { tabs } from "./config/RootTabsConfig";
 function App() {
   return (
     <div className="mx-auto h-screen w-screen">
-      <div className="fixed top-0 border-b h-16 w-screen">
+      <div className="z-10 fixed top-0 border-b h-16 w-screen">
         <Navbar tabs={tabs} />
       </div>
-      <div className="flex w-full h-full pt-16">
+      <div className="z-0 flex w-full h-full pt-16">
         <Routes>
           {tabs.map(({ key, component }) => (
             <Route

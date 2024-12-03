@@ -3,7 +3,7 @@ import { motion } from "motion/react";
 function Home() {
   return (
     <div className="w-full min-h-screen">
-      <div className="grid place-items-center max-w-4xl mx-auto p-8">
+      <div className="grid place-items-center max-w-4xl mx-auto p-8 z-0">
         <motion.h1
           className="text-4xl font-bold mb-8"
           initial={{ x: -100, opacity: 0 }}
@@ -20,7 +20,11 @@ function Home() {
               repeat: Infinity,
               repeatDelay: 2,
             }}
-            style={{ display: "inline-block", originX: 0.7, originY: 0.7 }}
+            style={{
+              display: "inline-block",
+              originX: 0.7,
+              originY: 0.7,
+            }}
           >
             👋
           </motion.span>
