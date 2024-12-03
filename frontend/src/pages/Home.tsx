@@ -1,5 +1,13 @@
 import { motion } from "motion/react";
 
+function Card({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="rounded-lg p-6 shadow-md dark:shadow-lg dark:shadow-white/20">
+      {children}
+    </div>
+  );
+}
+
 function Home() {
   return (
     <div className="w-full min-h-screen">
@@ -38,7 +46,7 @@ function Home() {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-6 rounded-lg shadow-sm">
+            <Card>
               <h2 className="text-xl font-semibold mb-3">What I'm Learning</h2>
               <ul className="list-disc list-inside space-y-2">
                 <li>Full-stack Development</li>
@@ -46,16 +54,17 @@ function Home() {
                 <li>Software Design</li>
                 <li>System Design</li>
               </ul>
-            </div>
+            </Card>
 
-            <div className="p-6 rounded-lg shadow-sm">
-              <h2 className="text-xl font-semibold mb-3">Current Focus</h2>
-              <p>
-                When I'm not studying, you'll find me working on personal
-                projects, reading up on something, at the gym, or spoiling my
-                girlfriend.
-              </p>
-            </div>
+            <Card>
+              <h2 className="text-xl font-semibold mb-3">Hobbies</h2>
+              <ul className="list-disc list-inside space-y-2">
+                <li>Working on personal projects</li>
+                <li>Reading</li>
+                <li>Fitness (Bodybuilding, Powerlifting)</li>
+                <li>Spoiling my girlfriend</li>
+              </ul>
+            </Card>
           </div>
         </div>
       </div>
