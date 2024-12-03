@@ -36,11 +36,17 @@ export function Navbar({ tabs }: { tabs: Tabs[] }) {
   const location = useLocation();
   const isSelected = (key: string) => () =>
     location.pathname.substring(1) === key;
+
   const NavItems = tabs.map((tab) => (
-    <UnderlineOnSelection isSelected={isSelected(tab.key)}>
+    <UnderlineOnSelection
+      key={`navigation-btn-${tab.key}`}
+      isSelected={isSelected(tab.key)}
+      className="w-fit"
+    >
       <NavigationButton path={tab.key}>{tab.title}</NavigationButton>
     </UnderlineOnSelection>
   ));
+
   return (
     <nav className="border-b">
       <div className="relative flex h-16 items-center justify-center mx-4">
@@ -61,19 +67,24 @@ export function Navbar({ tabs }: { tabs: Tabs[] }) {
         </div>
 
         {/* Mobile Navigation */}
-        <div className="flex md:hidden mx-auto">
+        <div className="md:hidden flex items-center">
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon">
                 <Menu className="h-5 w-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right">{NavItems}</SheetContent>
+            <SheetContent
+              side="top"
+              className="flex flex-row items-center justify-center [&>button]:hidden"
+            >
+              {NavItems}
+            </SheetContent>
           </Sheet>
         </div>
 
         {/* Right side items (optional) */}
-        <div className="absolute right-0 hidden md:flex items-center space-x-4">
+        <div className="absolute right-0 flex items-center space-x-4">
           <ThemeToggle />
         </div>
       </div>
