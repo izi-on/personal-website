@@ -1,5 +1,5 @@
-import { FaLinkedin, FaGithub } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
+import { socialLinks } from "@/config/Social.tsx";
 
 function ContactMe() {
   return (
@@ -8,29 +8,18 @@ function ContactMe() {
         <h1 className="text-3xl font-bold mb-8">Let's talk!</h1>
 
         <div className="flex gap-6 items-center">
-          <Button
-            variant="ghost"
-            onClick={() =>
-              window.open("https://linkedin.com/in/hristo-sandev-7b8059172")
-            }
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-          >
-            <FaLinkedin className="w-8 h-8" />
-            <span>LinkedIn</span>
-          </Button>
-
-          <Button
-            variant="ghost"
-            onClick={() => {
-              window.open("https://github.com/izi-on");
-            }}
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 hover:opacity-80 transition-opacity"
-          >
-            <FaGithub className="w-8 h-8" />
-            <span>GitHub</span>
-          </Button>
+          {socialLinks.map((link) => (
+            <Button
+              variant="ghost"
+              onClick={() => window.open(link.url)}
+              rel="noopener noreferrer"
+              className="flex items-center gap-2
+              hover:opacity-80 transition-opacity"
+            >
+              {link.icon}
+              <span>{link.title}</span>
+            </Button>
+          ))}
         </div>
       </div>
     </div>

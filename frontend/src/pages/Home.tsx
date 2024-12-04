@@ -2,7 +2,10 @@ import { motion } from "motion/react";
 
 function Card({ children }: { children: React.ReactNode }) {
   return (
-    <div className="rounded-lg p-6 shadow-md dark:shadow-lg dark:shadow-white/20">
+    <div
+      className="rounded-lg p-6 
+      shadow-md dark:shadow-lg dark:shadow-white/20"
+    >
       {children}
     </div>
   );
