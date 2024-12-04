@@ -45,7 +45,8 @@ function Home() {
           <p className="text-lg">
             I'm a computer science student passionate about finding elegant
             solutions to complex problems. This personal website is a small
-            project. It's built with React, Tailwind CSS, and Vite.
+            project. It's built from scratch with React, Tailwind CSS, Shadcn
+            and Motion.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
