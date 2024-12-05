@@ -1,5 +1,5 @@
 # Use Python 3.11 slim image as base
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 # Set working directory
 WORKDIR /app
@@ -35,4 +35,5 @@ RUN poetry install --no-interaction
 EXPOSE 8000
 
 # Command to run the application
-CMD ["poetry", "run", "uvicorn", "app:main:socket_app", "--host", "0.0.0.0", "--port", "8000"]
+WORKDIR /app/app
+CMD ["poetry", "run", "uvicorn", "main:socket_app", "--host", "0.0.0.0", "--port", "8000"]
