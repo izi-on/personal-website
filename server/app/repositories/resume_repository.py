@@ -1,5 +1,4 @@
 from abc import ABC
-from typing import Any
 from repositories.abc import IRepository, MongoRepository
 from core.constants import RESUME_KEY
 

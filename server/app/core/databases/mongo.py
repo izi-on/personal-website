@@ -5,7 +5,7 @@ __all__ = ["mongo_client"]
 
 
 async def mongo_client():
-    mongo_client = MongoClient(os.environ["MONGO_PUBLIC_URL"])
+    mongo_client = MongoClient(os.environ["MONGO_URL"])
     try:
         yield mongo_client
     finally:

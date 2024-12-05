@@ -7,7 +7,7 @@ from core.databases.mongo import mongo_client
 class IRepository(ABC):
     @abstractmethod
     def get_latest(self) -> dict:
-        raise NotImplementedError
+        pass
 
 
 class MongoRepository(IRepository, ABC):
