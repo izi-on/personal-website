@@ -7,7 +7,7 @@ function ContactMe() {
       <div className="grid place-items-center max-w-4xl mx-auto p-8">
         <h1 className="text-3xl font-bold mb-8">Let's talk!</h1>
 
-        <div className="flex gap-6 items-center">
+        <div className="flex justify-center flex-wrap gap-6 items-center">
           {socialLinks.map((link) => (
             <Button
               variant="ghost"

@@ -4,6 +4,9 @@ version = "0.1.0"
 description = "server for my personal project website"
 authors = ["Hristo <sandevh@gmail.com>"]
 readme = "README.md"
+packages = [
+    { include = "app", from = "app" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -11,6 +14,8 @@ fastapi = "^0.115.5"
 uvicorn = "^0.32.1"
 python-socketio = "^5.11.4"
 sqlalchemy = "^2.0.36"
+redis = "^5.2.0"
+python-dotenv = "^1.0.1"
 
 
 [tool.poetry.group.dev.dependencies]

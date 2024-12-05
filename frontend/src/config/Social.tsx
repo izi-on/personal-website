@@ -1,4 +1,4 @@
-import { FaLinkedin, FaGithub } from "react-icons/fa";
+import { FaLinkedin, FaGithub, FaCalendar } from "react-icons/fa";
 
 export type SocialLink = {
   key: string;
@@ -19,5 +19,11 @@ export const socialLinks: SocialLink[] = [
     icon: <FaGithub />,
     title: "GitHub",
     url: "https://github.com/izi-on",
+  },
+  {
+    key: "calendar",
+    icon: <FaCalendar />,
+    title: "Book a meeting",
+    url: "https://cal.com/hristo-sandev-bkzybt",
   },
 ];
