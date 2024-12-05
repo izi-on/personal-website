@@ -16,6 +16,7 @@ python-socketio = "^5.11.4"
 sqlalchemy = "^2.0.36"
 redis = "^5.2.0"
 python-dotenv = "^1.0.1"
+pymongo = "^4.10.1"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -1,6 +1,17 @@
-from repositories.abc import RedisRepository
+from abc import ABC
+from typing import Any
+from repositories.abc import IRepository, MongoRepository
+from core.constants import RESUME_KEY
 
 
-class ResumeRepository(RedisRepository):
-    def get(self, id: str):
-        return self.redis_client.get(id)
+class ResumeRepository(IRepository, ABC):
+    def get_latest_resume(self) -> dict:
+        return self.get_latest()
+
+
+class MongoResumeRepository(MongoRepository, ResumeRepository):
+    def get_db(self):
+        return RESUME_KEY
+
+    def get_collection(self):
+        return RESUME_KEY

@@ -1,1 +1,4 @@
-RESUME_KEY = "resume"
+from repositories.resume_repository import MongoResumeRepository
+
+
+resume_repository = MongoResumeRepository

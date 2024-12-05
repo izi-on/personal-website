@@ -1,17 +1,26 @@
 from abc import ABC, abstractmethod
-from typing import Any
-
 from fastapi import Depends
-from redis import Redis
-from core.databases.redis import redis_client
+from pymongo import MongoClient
+from core.databases.mongo import mongo_client
 
 
-class Repository(ABC):
+class IRepository(ABC):
     @abstractmethod
-    def get(self, id: str) -> Any:
+    def get_latest(self) -> dict:
         raise NotImplementedError
 
 
-class RedisRepository(Repository):
-    def __init__(self, redis_client_: Redis = Depends(redis_client)):
-        self.redis_client = redis_client_
+class MongoRepository(IRepository, ABC):
+    def __init__(self, mongo_client_: MongoClient = Depends(mongo_client)):
+        self.mongo_client = mongo_client_[self.get_db()][self.get_collection()]
+
+    def get_latest(self) -> dict:
+        return self.mongo_client.find().sort("_id", -1).limit(1).next()
+
+    @abstractmethod
+    def get_db(self) -> str:
+        pass
+
+    @abstractmethod
+    def get_collection(self) -> str:
+        pass
