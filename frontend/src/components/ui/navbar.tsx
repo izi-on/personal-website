@@ -76,7 +76,8 @@ export function Navbar({ tabs }: { tabs: Tabs[] }) {
             </SheetTrigger>
             <SheetContent
               side="top"
-              className="flex flex-row items-center justify-center [&>button]:hidden"
+              className="flex 
+              flex-row items-center justify-center [&>button]:hidden"
             >
               {NavItems}
             </SheetContent>

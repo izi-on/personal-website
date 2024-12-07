@@ -14,7 +14,7 @@ import {
   AdapterFunction,
   AdapterComponents,
 } from "@/types/adapter";
-import { getMostSimilar } from "@/utils/word_semantic";
+// import { getMostSimilar } from "@/utils/word_semantic";
 // TODO: This was rushed, make this cleaner and better
 
 // Define a map from canonical titles to their associated icon and base styling
