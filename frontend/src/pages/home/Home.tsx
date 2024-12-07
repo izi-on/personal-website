@@ -1,9 +1,18 @@
+import { resumeAPI } from "@/api/resume_client";
+import { adapter } from "@/components/resume_adapter/basic_adapter";
+import {
+  ResumeRenderer,
+  ResumeSkeleton,
+} from "@/components/resume_renderer/basic_renderer";
+import { useQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
+import React from "react";
+import { preprocessResume } from "@/utils/adapter_preprocessor";
 
 function Card({ children }: { children: React.ReactNode }) {
   return (
     <div
-      className="rounded-lg p-6 
+      className="rounded-lg p-6
       shadow-md dark:shadow-lg dark:shadow-white/20"
     >
       {children}
@@ -12,11 +21,20 @@ function Card({ children }: { children: React.ReactNode }) {
 }
 
 function Home() {
+  const { data, isPending, isError } = useQuery({
+    queryKey: ["home"],
+    queryFn: () =>
+      resumeAPI().getResume().then(preprocessResume.bind(null, adapter)),
+  });
+
   return (
     <div className="w-full min-h-screen">
-      <div className="grid place-items-center max-w-4xl mx-auto p-8 z-0">
+      <div
+        className="grid place-items-center max-w-4xl
+        mx-auto p-8 z-0 gap-y-8"
+      >
         <motion.h1
-          className="text-4xl font-bold mb-8"
+          className="text-4xl font-bold"
           initial={{ x: -100, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
@@ -70,6 +88,14 @@ function Home() {
               </ul>
             </Card>
           </div>
+        </div>
+        <div className="flex flex-col w-full">
+          <div className="w-full text-center text-sm text-gray-500 italic">
+            Fun fact: the resume below is parsed and synced with my PDF resume
+          </div>
+          {isPending && <ResumeSkeleton />}
+          {isError && <div>Error loading resume</div>}
+          {!isPending && data && <ResumeRenderer sections={data} />}
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import ContactMe from "@/pages/ContactMe";
-import Home from "@/pages/Home";
+import Home from "@/pages/home/Home";
 
 export type Tabs = {
   key: string;
