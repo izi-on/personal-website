@@ -34,11 +34,11 @@ const defaultConfig = { icon: FaUser, colorClass: "text-gray-300" };
 
 // A Title component factory
 const makeTitleComponent = (
-  title: string,
   depth: number,
   Icon: IconType,
   colorClass: string,
 ): React.FC<TitleComponentProps> =>
+  // usually, we want to do something with the title but for now it's not necessary
   function TitleComponent({ title }) {
     // Choose heading level based on depth
     const Tag = depth === 0 ? "h1" : depth === 1 ? "h2" : "h3";
@@ -81,7 +81,6 @@ export const adapter: AdapterFunction = async (
   const config = sectionConfig[usedTitle] || defaultConfig;
 
   const TitleComponent = makeTitleComponent(
-    usedTitle,
     depth,
     config.icon,
     config.colorClass,
