@@ -8,6 +8,8 @@ import { useQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import React from "react";
 import { preprocessResume } from "@/utils/adapter_preprocessor";
+import { useToast } from "@/hooks/use-toast";
+import { toastErrorHandler, withRethrow } from "@/utils/error";
 
 function Card({ children }: { children: React.ReactNode }) {
   return (
@@ -21,10 +23,15 @@ function Card({ children }: { children: React.ReactNode }) {
 }
 
 function Home() {
-  const { data, isPending, isError } = useQuery({
+  const { toast } = useToast();
+  const { data, isPending } = useQuery({
     queryKey: ["home"],
     queryFn: () =>
-      resumeAPI().getResume().then(preprocessResume.bind(null, adapter)),
+      resumeAPI()
+        .getResume()
+        .then(preprocessResume.bind(null, adapter))
+        .catch(withRethrow(toastErrorHandler(toast))),
+    retry: false,
   });
 
   return (
@@ -93,8 +100,7 @@ function Home() {
           <div className="w-full text-center text-sm text-gray-500 italic">
             Fun fact: the resume below is parsed and synced with my PDF resume
           </div>
-          {isPending && <ResumeSkeleton />}
-          {isError && <div>Error loading resume</div>}
+          {isPending || (!data && <ResumeSkeleton />)}
           {!isPending && data && <ResumeRenderer sections={data} />}
         </div>
       </div>

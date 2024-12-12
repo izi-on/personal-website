@@ -18,27 +18,26 @@ import {
 // TODO: This was rushed, make this cleaner and better
 
 // Define a map from canonical titles to their associated icon and base styling
-const sectionConfig: Record<string, { icon: IconType; colorClass: string }> = {
-  "Contact Information": { icon: FaUser, colorClass: "text-green-700" },
-  Education: { icon: FaGraduationCap, colorClass: "text-blue-700" },
+const sectionConfig: Record<string, { icon: IconType; style: string }> = {
+  "Contact Information": { icon: FaUser, style: "text-green-700" },
+  Education: { icon: FaGraduationCap, style: "text-blue-700" },
   "Professional Experience": {
     icon: FaBriefcase,
-    colorClass: "text-purple-700",
+    style: "text-purple-700",
   },
-  Projects: { icon: FaProjectDiagram, colorClass: "text-pink-700" },
-  Awards: { icon: FaTrophy, colorClass: "text-yellow-700" },
-  Skills: { icon: FaTools, colorClass: "text-red-700" },
+  Projects: { icon: FaProjectDiagram, style: "text-pink-700" },
+  Awards: { icon: FaTrophy, style: "text-yellow-700" },
+  Skills: { icon: FaTools, style: "text-red-700" },
 };
 
-const defaultConfig = { icon: FaUser, colorClass: "text-gray-300" };
+const defaultConfig = { icon: FaUser, style: "text-gray-300" };
 
 // A Title component factory
 const makeTitleComponent = (
   depth: number,
   Icon: IconType,
-  colorClass: string,
+  style: string,
 ): React.FC<TitleComponentProps> =>
-  // usually, we want to do something with the title but for now it's not necessary
   function TitleComponent({ title }) {
     // Choose heading level based on depth
     const Tag = depth === 0 ? "h1" : depth === 1 ? "h2" : "h3";
@@ -46,7 +45,7 @@ const makeTitleComponent = (
       depth === 0 ? "text-3xl" : depth === 1 ? "text-2xl" : "text-xl";
 
     return (
-      <div className={`flex items-center gap-2 mb-2 ${colorClass}`}>
+      <div className={`flex items-center gap-2 mb-2 ${style}`}>
         <Icon />
         <Tag className={`font-bold ${sizeClass}`}>{title}</Tag>
       </div>
@@ -80,11 +79,7 @@ export const adapter: AdapterFunction = async (
 
   const config = sectionConfig[usedTitle] || defaultConfig;
 
-  const TitleComponent = makeTitleComponent(
-    depth,
-    config.icon,
-    config.colorClass,
-  );
+  const TitleComponent = makeTitleComponent(depth, config.icon, config.style);
   const ContentComponent = makeStringContentComponent();
 
   return {

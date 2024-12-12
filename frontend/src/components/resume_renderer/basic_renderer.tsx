@@ -4,12 +4,17 @@ import { ResumeRendererProps, SectionRendererProps } from "@/types/renderer";
 
 export function ResumeSkeleton() {
   return (
-    <div className="flex flex-col space-y-6">
-      <Skeleton className="h-[125px] w-full rounded-xl" />
-      <div className="space-y-4">
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-full" />
-      </div>
+    <div className="space-y-10 mt-3">
+      {[...Array(2)].map((_, i) => (
+        <div key={i} className="flex flex-col space-y-5">
+          <Skeleton className="h-9 w-1/2 rounded-xl" />
+          <div className="space-y-4">
+            {[...Array(5)].map((_, idx) => (
+              <Skeleton key={idx} className="h-5 w-full" />
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
