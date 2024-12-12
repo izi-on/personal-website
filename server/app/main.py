@@ -1,10 +1,9 @@
 import os
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 import socketio
 from api.v1.router import v1_router
 from dotenv import load_dotenv
-from starlette.middleware.httpsredirect import HTTPSRedirectMiddleware
 
 load_dotenv()
 
@@ -35,12 +34,17 @@ app.add_middleware(
 
 
 @app.middleware("http")
-async def add_security_headers(request, call_next):
-    response = await call_next(request)
-    response.headers["Strict-Transport-Security"] = (
-        "max-age=31536000; includeSubDomains"
-    )
-    return response
+async def log_request_headers(request: Request, call_next):
+    # You can also log to a file or use logging module
+    print("\n=== Request Headers ===")
+    print(f"Method: {request.method}")
+    print(f"URL: {request.url}")
+    print("Headers:")
+    for name, value in request.headers.items():
+        print(f"{name}: {value}")
+    print("=====================\n")
+
+    return await call_next(request)
 
 
 print(os.environ.get("ALLOWED_ORIGINS", "*").split(","))
