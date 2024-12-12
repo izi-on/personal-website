@@ -100,7 +100,7 @@ function Home() {
           <div className="w-full text-center text-sm text-gray-500 italic">
             Fun fact: the resume below is parsed and synced with my PDF resume
           </div>
-          {isPending || (!data && <ResumeSkeleton />)}
+          {(isPending || !data) && <ResumeSkeleton />}
           {!isPending && data && <ResumeRenderer sections={data} />}
         </div>
       </div>
