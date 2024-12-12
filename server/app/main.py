@@ -25,7 +25,12 @@ app.add_middleware(
     allow_origins=os.environ.get("ALLOWED_ORIGINS", "*").split(","),
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
-    allow_headers=["Content-Type"],
+    allow_headers=[
+        "Content-Type",
+        "X-Real-IP",
+        "X-Forwarded-Proto",
+        "X-Railway-Request-Id",
+    ],
 )
 
 
