@@ -34,6 +34,16 @@ app.add_middleware(
 
 
 @app.middleware("http")
+async def ssl_middleware(request: Request, call_next):
+    forwarded_proto = request.headers.get("X-Forwarded-Proto")
+    if forwarded_proto:
+        # Update request scope to use the original protocol
+        request.scope["scheme"] = forwarded_proto
+
+    return await call_next(request)
+
+
+@app.middleware("http")
 async def log_request_headers(request: Request, call_next):
     # You can also log to a file or use logging module
     print("\n=== Request Headers ===")
@@ -44,7 +54,17 @@ async def log_request_headers(request: Request, call_next):
         print(f"{name}: {value}")
     print("=====================\n")
 
-    return await call_next(request)
+    response = await call_next(request)
+
+    # Log response
+    print("\n=== Response ===")
+    print(f"Status Code: {response.status_code}")
+    print("Response Headers:")
+    for name, value in response.headers.items():
+        print(f"{name}: {value}")
+    print("===============\n")
+
+    return response
 
 
 print(os.environ.get("ALLOWED_ORIGINS", "*").split(","))
