@@ -14,6 +14,8 @@ A modern, responsive personal portfolio website built with React and FastAPI.
   - FastAPI
   - MongoDB
   - Python
+ 
+Hosted with Vercel and Railway
 
 ## Features ✨
 
