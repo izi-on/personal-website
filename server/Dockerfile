@@ -36,4 +36,4 @@ EXPOSE 8000
 
 # Command to run the application
 WORKDIR /app/app
-CMD ["poetry", "run", "uvicorn", "main:socket_app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["poetry", "run", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
