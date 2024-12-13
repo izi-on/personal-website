@@ -1,4 +1,5 @@
 import { IconType } from "react-icons";
+import { flow as pipe } from "lodash";
 import {
   FaUser,
   FaGraduationCap,
@@ -13,12 +14,19 @@ import {
   ContentComponentProps,
   AdapterFunction,
   AdapterComponents,
+  SectionConfigType,
+  ResumeTitle,
+  AdapterContentMod,
 } from "@/types/adapter";
+import {
+  insertInParagraph,
+  linkifyContent,
+} from "@/components/resume_adapter/mods";
 // import { getMostSimilar } from "@/utils/word_semantic";
 // TODO: This was rushed, make this cleaner and better
 
 // Define a map from canonical titles to their associated icon and base styling
-const sectionConfig: Record<string, { icon: IconType; style: string }> = {
+const sectionConfig: SectionConfigType = {
   "Contact Information": { icon: FaUser, style: "text-green-700" },
   Education: { icon: FaGraduationCap, style: "text-blue-700" },
   "Professional Experience": {
@@ -30,7 +38,7 @@ const sectionConfig: Record<string, { icon: IconType; style: string }> = {
   Skills: { icon: FaTools, style: "text-red-700" },
 };
 
-const defaultConfig = { icon: FaUser, style: "text-gray-300" };
+const defaultConfig = { icon: () => null, style: "text-gray-300" };
 
 // A Title component factory
 const makeTitleComponent = (
@@ -53,34 +61,43 @@ const makeTitleComponent = (
   };
 
 // A Content component factory for strings
-const makeStringContentComponent = (): React.FC<ContentComponentProps> =>
+const makeStringContentComponent = (
+  contentMod: AdapterContentMod,
+): React.FC<ContentComponentProps> =>
   function ContentComponent({ content }) {
     if (typeof content === "string") {
-      return <p className="ml-4 mb-1 text-base">{content}</p>;
+      return contentMod(
+        <>
+          {content}
+          <br />
+        </>,
+      );
     }
     return null;
   };
 
+// This adapter will return components that will be used
+// to render the resume by the resume renderer
 export const adapter: AdapterFunction = async (
   rawTitle: string,
   depth: number,
 ): Promise<AdapterComponents> => {
-  // TODO: make a server for this
-
+  // TODO: api for this
+  //
   // if at the top, we want to get the canonical names
   // const { canonicalTitle, similarity } =
   //   depth === 0
   //     ? await getMostSimilar(rawTitle, canonicalNames)
   //     : { canonicalTitle: rawTitle, similarity: 1 };
-  //
-  // // only if similar enough, use prediction of canonical title
+  // only if similar enough, use prediction of canonical title
   // const usedTitle = (similarity > 0.5 ? canonicalTitle : rawTitle).trim();
-  const usedTitle = rawTitle.trim();
-
+  const usedTitle = rawTitle.trim() as ResumeTitle; // assume title
   const config = sectionConfig[usedTitle] || defaultConfig;
 
   const TitleComponent = makeTitleComponent(depth, config.icon, config.style);
-  const ContentComponent = makeStringContentComponent();
+  const ContentComponent = makeStringContentComponent(
+    pipe(linkifyContent, insertInParagraph),
+  );
 
   return {
     TitleComponent,

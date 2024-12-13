@@ -38,3 +38,9 @@ export const preprocessResume = async (
   Promise.all(
     resume.root.map((section) => preprocessSection(section, 0, adapter)),
   );
+
+export function extractUrls(text: string) {
+  const urlRegex =
+    /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gi;
+  return text.match(urlRegex) || [];
+}

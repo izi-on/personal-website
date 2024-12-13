@@ -7,7 +7,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
 import React from "react";
-import { preprocessResume } from "@/utils/adapter_preprocessor";
+import { preprocessResume } from "@/utils/adapter";
 import { useToast } from "@/hooks/use-toast";
 import { toastErrorHandler, withRethrow } from "@/utils/error";
 
