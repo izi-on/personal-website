@@ -6,6 +6,9 @@ import { ThemeProvider } from "./context/ThemeContext.tsx";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "./components/ui/toaster.tsx";
+import { inject } from "@vercel/analytics";
+
+inject();
 
 const queryClient = new QueryClient();
 
