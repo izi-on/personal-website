@@ -23,7 +23,7 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
-      "max-len": ["error", { "code": 80 }],
+      "max-len": ["error", { "code": 111 }],
     },
   },
 )

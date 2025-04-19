@@ -1,46 +1,170 @@
-import { AdapterContentMod } from "@/types/adapter";
-import { extractUrls } from "@/utils/adapter";
-import React from "react";
+import React, { isValidElement, ReactNode } from "react";
+import {
+  FaPython,
+  FaReact,
+  FaJava,
+  FaDocker,
+  FaGithub,
+  FaJs,
+  FaCode,
+} from "react-icons/fa";
+import {
+  SiTypescript,
+  SiPostgresql,
+  SiRedis,
+  SiMongodb,
+  SiGo,
+  SiOcaml,
+  SiFastapi,
+  SiPydantic,
+  SiGin,
+  SiAngular,
+} from "react-icons/si";
 
-const applyOnReactElementTreeLeavesString: (
-  contentMod: (content: string) => React.ReactNode,
-) => AdapterContentMod = (contentMod) =>
-  function transform(content: React.ReactNode): React.ReactNode {
-    if (typeof content === "string") return contentMod(content);
-    if (Array.isArray(content)) return content.map(transform);
-    if (React.isValidElement(content)) {
-      const { children } = content.props;
-      if (!children) return content;
-      return React.cloneElement(content, {}, transform(children));
+/**
+ * Recursively traverse a JSX tree.
+ * @param node   A ReactNode (JSX returned from a component or `<Component />` itself)
+ * @param onText Callback invoked for every string / number encountered
+ */
+export function walkText(
+  node: ReactNode,
+  onText: (txt: string) => ReactNode
+): ReactNode {
+  if (node === null || node === undefined || typeof node === "boolean") {
+    return node; // nothing to do
+  }
+
+  // Plain text (string | number) –‑ you've arrived
+  if (typeof node === "string") {
+    return onText(String(node));
+  }
+
+  // Fragment, list‐render, or any other array of children
+  if (Array.isArray(node)) {
+    return node.map((child) => walkText(child, onText));
+  }
+
+  // Regular JSX element
+  if (isValidElement(node)) {
+    // Recursively process children
+    const processedChildren = walkText(node.props.children, onText);
+    // Clone the element with the processed children
+    return React.cloneElement(node, node.props, processedChildren);
+  }
+
+  // Handle other potential node types if necessary, or return the node as is
+  return node;
+}
+
+type contentMod = (content: ReactNode) => ReactNode;
+
+export const linkifyContent: contentMod = (content) => {
+  return walkText(content, (txt) => {
+    // find url with regex, doesnt need to start with http
+    const urlRegex = /https?:\/\/[^\s]+/g;
+    const urls = txt.match(urlRegex);
+
+    if (!urls) return txt;
+
+    const urlElems = urls.map((url) => {
+      return (
+        <a href={url} target="_blank" rel="noreferrer">
+          {url}
+        </a>
+      );
+    });
+
+    // split the string into parts, and replace the urls with <a> tags
+    const parts = txt.split(urlRegex);
+
+    const result = [];
+    for (let i = 0; i < parts.length; i++) {
+      result.push(parts[i]);
+      if (i < urlElems.length) {
+        result.push(urlElems[i]);
+      }
     }
-    return content;
-  };
-
-export const insertInParagraph: AdapterContentMod = (content) => (
-  <p className="ml-4 mb-1 text-base">{content}</p>
-);
-
-const linkifyContentHelper = (content: string): React.ReactElement => {
-  console.log(content);
-  const newComponent: React.ReactElement[] = [];
-  let curContent = content;
-  extractUrls(content).forEach((url) => {
-    const parts = curContent.split(url);
-    newComponent.push(<>{parts[0]}</>);
-    newComponent.push(
-      <a
-        href={url}
-        target="_blank"
-        rel="noreferrer"
-        className="text-blue-600 underline"
-      >
-        {url}
-      </a>,
-    );
-    curContent = parts[1];
+    return result;
   });
-  newComponent.push(<>{curContent}</>);
-  return <>{newComponent}</>;
 };
-export const linkifyContent =
-  applyOnReactElementTreeLeavesString(linkifyContentHelper);
+
+export const addIconToContent: contentMod = (content) => {
+  return walkText(content, (txt) => {
+    // Define technology keywords and their corresponding icons
+    const techIcons: Record<string, React.ReactElement> = {
+      Angular: <SiAngular />,
+      Python: <FaPython />,
+      FastAPI: <SiFastapi />,
+      Pydantic: <SiPydantic />,
+      Typescript: <SiTypescript />,
+      Javascript: <FaJs />,
+      React: <FaReact />,
+      PostgreSQL: <SiPostgresql />,
+      Postgres: <SiPostgresql />,
+      Redis: <SiRedis />,
+      MongoDB: <SiMongodb />,
+      Golang: <SiGo />,
+      Gin: <SiGin />,
+      Java: <FaJava />,
+      OCaml: <SiOcaml />,
+      DevOps: <FaCode />,
+      Docker: <FaDocker />,
+      "GitHub Actions": <FaGithub />,
+    };
+
+    // Create a regex pattern to match any of the tech keywords
+    const techKeywords = Object.keys(techIcons).join("\\b|\\b");
+    const techRegex = new RegExp(`\\b${techKeywords}\\b`, "g");
+
+    const matches = txt.match(techRegex);
+
+    if (!matches) return txt;
+
+    // Map the matches to elements with icons
+    const techElems = matches.map((tech) => {
+      return (
+        <span
+          key={tech}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            position: "relative",
+            whiteSpace: "nowrap",
+          }}
+        >
+          <span
+            style={{
+              marginRight: "4px",
+              display: "inline-flex",
+              alignItems: "center",
+              position: "relative",
+            }}
+          >
+            {techIcons[tech]}
+          </span>
+          <span
+            style={{
+              position: "relative",
+              top: "0.125em", // Adjust the text downward instead
+            }}
+          >
+            {tech}
+          </span>
+        </span>
+      );
+    });
+
+    // Split the text by tech keywords and combine with the new elements
+    const parts = txt.split(techRegex);
+
+    const result: React.ReactNode[] = [];
+    for (let i = 0; i < parts.length; i++) {
+      result.push(parts[i]);
+      if (i < techElems.length) {
+        result.push(techElems[i]);
+      }
+    }
+
+    return result;
+  });
+};

@@ -18,3 +18,8 @@ export const ResumeSchema = z.object({
 
 export type ResumeSection = z.infer<typeof ResumeSectionSchema>;
 export type Resume = z.infer<typeof ResumeSchema>;
+
+export type ParsedResumeSection = ResumeSection & {
+  startDate?: Date;
+  endDate?: Date;
+};
