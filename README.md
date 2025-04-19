@@ -1,13 +1,13 @@
 # Personal Portfolio Website 🚀
 
-A modern, responsive personal portfolio website built with React and FastAPI.
+A modern, responsive personal portfolio website built with React TS and FastAPI that is synced
+and updated automatically with my PDF resume.
 
 ## Tech Stack 💻
 
 - **Frontend:**
   - React
   - TailwindCSS
-  - shadcn/ui components
   - TypeScript
 
 - **Backend:**
@@ -16,14 +16,6 @@ A modern, responsive personal portfolio website built with React and FastAPI.
   - Python
  
 Hosted with Vercel and Railway
-
-## Features ✨
-
-- Responsive design that works on all devices
-- Dark/Light mode toggle
-- Modern UI components from shadcn
-- Dynamic content management through MongoDB
-- Fast and efficient API endpoints
 
 ## Acknowledgments 🙏
 
