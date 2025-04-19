@@ -1,15 +1,12 @@
 import { resumeAPI } from "@/api/resume_client";
-import { adapter } from "@/components/resume_adapter/basic_adapter";
-import {
-  ResumeRenderer,
-  ResumeSkeleton,
-} from "@/components/resume_renderer/basic_renderer";
+import { ResumeSkeleton } from "@/components/resume_renderer/basic_renderer";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "motion/react";
-import React from "react";
-import { preprocessResume } from "@/utils/adapter";
 import { useToast } from "@/hooks/use-toast";
 import { toastErrorHandler, withRethrow } from "@/utils/error";
+import { parseResume } from "@/lib/Parse";
+import { resumeComponentRender } from "@/lib/ResumeComponentRendered";
+import { resumeComponentMods } from "@/lib/ResumeComponentMods";
 
 function Card({ children }: { children: React.ReactNode }) {
   return (
@@ -24,12 +21,14 @@ function Card({ children }: { children: React.ReactNode }) {
 
 function Home() {
   const { toast } = useToast();
-  const { data, isPending } = useQuery({
+  const { data: ResumeComponent, isPending } = useQuery({
     queryKey: ["home"],
     queryFn: () =>
       resumeAPI()
         .getResume()
-        .then(preprocessResume.bind(null, adapter))
+        .then(parseResume)
+        .then(resumeComponentRender)
+        .then(resumeComponentMods)
         .catch(withRethrow(toastErrorHandler(toast))),
     retry: false,
   });
@@ -97,11 +96,11 @@ function Home() {
           </div>
         </div>
         <div className="flex flex-col w-full">
-          <div className="w-full text-center text-sm text-gray-500 italic">
+          <div className="w-full text-center text-sm text-gray-500 italic mb-4">
             Fun fact: the resume below is parsed and synced with my PDF resume
           </div>
-          {(isPending || !data) && <ResumeSkeleton />}
-          {!isPending && data && <ResumeRenderer sections={data} />}
+          {isPending && <ResumeSkeleton />}
+          {!isPending && ResumeComponent}
         </div>
       </div>
     </div>
