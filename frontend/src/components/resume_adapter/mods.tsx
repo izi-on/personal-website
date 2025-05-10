@@ -20,6 +20,7 @@ import {
   SiGin,
   SiAngular,
 } from "react-icons/si";
+import shopifyLogo from "@/assets/shopify.svg";
 
 /**
  * Recursively traverse a JSX tree.
@@ -28,7 +29,7 @@ import {
  */
 export function walkText(
   node: ReactNode,
-  onText: (txt: string) => ReactNode
+  onText: (txt: string) => ReactNode,
 ): ReactNode {
   if (node === null || node === undefined || typeof node === "boolean") {
     return node; // nothing to do
@@ -88,7 +89,62 @@ export const linkifyContent: contentMod = (content) => {
   });
 };
 
-export const addIconToContent: contentMod = (content) => {
+export const fancifyText: contentMod = (content) => {
+  //
+  // for big boy stuff
+  const jobElems: Record<
+    string,
+    { text_color: string; icon: React.ReactElement }
+  > = {
+    Shopify: {
+      text_color: "text-green-500",
+      icon: <img src={shopifyLogo} width="16" height="16" />,
+    },
+  };
+  return walkText(content, (txt) => {
+    // Create a regex pattern to match any of the tech keywords
+    const jobKeywords = Object.keys(jobElems).join("\\b|\\b");
+    const jobRegex = new RegExp(`\\b${jobKeywords}\\b`, "g");
+
+    const matches = txt.match(jobRegex);
+
+    if (!matches) return txt;
+
+    // Map the matches to elements with icons
+    const techElems = matches.map((tech) => {
+      return (
+        <div className="flex flex-row items-center">
+          <span
+            style={{
+              marginRight: "4px",
+              display: "inline-flex",
+              alignItems: "center",
+              position: "relative",
+            }}
+          >
+            {jobElems[tech].icon}
+          </span>
+          <div className={jobElems[tech].text_color}>{tech}</div>
+        </div>
+      );
+    });
+
+    // Split the text by tech keywords and combine with the new elements
+    const parts = txt.split(jobRegex);
+
+    const result: React.ReactNode[] = [];
+    for (let i = 0; i < parts.length; i++) {
+      result.push(parts[i]);
+      if (i < techElems.length) {
+        result.push(techElems[i]);
+      }
+    }
+
+    return result;
+  });
+};
+
+export const decorateSpecialKeywords: contentMod = (content) => {
   return walkText(content, (txt) => {
     // Define technology keywords and their corresponding icons
     const techIcons: Record<string, React.ReactElement> = {
